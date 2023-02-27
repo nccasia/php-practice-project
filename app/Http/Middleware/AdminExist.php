@@ -6,6 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,8 +17,16 @@ class AdminExist
      *
      * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
-    public function handle(Request $request, Closure $next): string
+    public function handle(Request $request, Closure $next)
     {
+        $user = User::where('isAdmin', '=', 1)->count();
+        if($user == 0)
+        {
+            return redirect('/admin/login');
+        }
+//        if (!Auth::check()) {
+//            return redirect('/admin/login');
+//        }
         return $next($request);
     }
 }

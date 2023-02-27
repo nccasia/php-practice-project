@@ -12,18 +12,17 @@ class Role
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::check())
-        {
+        if (Auth::check() && Auth::user()->isAdmin != 1) {
             abort(404, 'Lỗi không thấy trang');
+        } else {
+            if (!Auth::check()) {
+                abort(403, 'Lỗi không thấy trang');
+            }
         }
-//        else if(!Auth::check())
-//        {
-//            abort(403, 'Lỗi không thấy trang');
-//        }
         return $next($request);
     }
 }
