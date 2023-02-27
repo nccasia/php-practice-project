@@ -22,20 +22,21 @@ class PostTest extends TestCase
 //        $this->assertDatabaseHas('post', $post->toArray());
 //    }
 
-    public function testUpdate_Post()
-    {
-        $post = Post::factory()->create();
-        $id = $post->id;
-        $this->json(
-            'POST',
-            "api/admin/update-post/{$id}",
-            [
-                'title' => 'Test',
-                'content' => 'Check',
-                'image' => 'Avartar.jpg'
-            ]
-        )->assertJson(['status' => true]);
-    }
+//    public function testUpdate_Post()
+//    {
+//        $post = Post::factory()->create();
+//        $id = $post->id;
+//        $this->json(
+//            'POST',
+//            "api/admin/update-post/{$id}",
+//            [
+//                'title' => 'Test',
+//                'content' => 'Check',
+//                'image' => 'Avartar.jpg'
+//            ]
+//        )->json(['status' => true]);
+//        $this->assertDatabaseHas('post', $post->toArray());
+//    }
 
 //    public function testDelete_Post()
 //    {

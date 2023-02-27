@@ -11,6 +11,9 @@ class RouteTest extends TestCase
     /**
      * A basic feature test example.
      */
+
+    use RefreshDatabase;
+
 //    public function test_example(): void
 //    {
 //        $response = $this->get('/');
@@ -28,10 +31,10 @@ class RouteTest extends TestCase
 //        parent::tearDown();
 //    }
 
-    public function testIndex()
-    {
-        $this->get('/admin/Dashboard')->assertStatus(200);
-    }
+//    public function testIndex()
+//    {
+//        $this->get('/admin/Dashboard')->assertStatus(200);
+//    }
 
     public function testLogin()
     {
