@@ -19,6 +19,7 @@ class RegisterCotroller extends Controller
 
     public function index()
     {
+//        dd('hello');
         return view('backend.admin_register');
     }
 

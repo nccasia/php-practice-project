@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\Backend\UserRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -48,25 +49,37 @@ class UserController extends Controller
 
     public function updatePass($token, Request $request)
     {
-//        $user = User::find(Auth::user()->id);
-//        if ($request->password_old != null && $request->password == $request->password_confirmation) {
-//            //Kiểm tra Mật khẩu cũ có giống với mật khẩu đã đăng ký
-//            if (Hash::check($request->password_old, $user->password)) {
-////                DB::beginTransaction();
-//                $user->password = Hash::make($request->password);
-//                $user->save();
-//                return response()->json([
-//                    'status' => true,
-//                    'messsage' => 'Cập nhật mật khẩu thành công'
-//                ]);
-//            }
-//        }
+        $user = Auth::user();
+        //Kiểm tra đã nhập mật khẩu cũ và kiểm tra xem mật khẩu mới giống với xác nhận mật khẩu
+        if ($request->password_old != null && $request->password == $request->password_confirmation) {
+            //Kiểm tra Mật khẩu cũ có giống với mật khẩu đã đăng ký
+            if (Hash::check($request->password_old, $user->password)) {
 
+                DB::beginTransaction();
 
-        return response()->json([
-            'status' => false,
-            'messsage' => 'Cập nhật mật khẩu không thành công'
-        ]);
+                try {
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    DB::commit();
+
+                    return response()->json([
+                        'status' => true,
+                        'messsage' => 'Cập nhật mật khẩu thành công'
+                    ]);
+
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => false,
+                        'messsage' => throw $e
+                    ]);
+                }
+            }
+            return response()->json([
+                'status' => false,
+                'message' => 'Xác nhận mật khẩu cũ sai'
+            ]);
+        }
     }
 
     public function forgotPass(Request $request)
@@ -76,8 +89,11 @@ class UserController extends Controller
         $user->token = $token;
         $user->save();
         if ($this->checkToken($user, $token)) {
-//            $data[]
+            $user->password = Hash::make($request->password);
+            $user->save();
+            Auth::login($user);
         }
+        abort(403, 'Lỗi');
     }
 
     public function show($id)
