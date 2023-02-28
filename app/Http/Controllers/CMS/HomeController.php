@@ -16,9 +16,9 @@ class HomeController extends Controller
 
     public function Dashboard()
     {
-        $post = Post::all();
-        $user = User::all();
-        return view('Dashboard.index', compact('user','post'));
+        $post = $this->post->index();
+        $user = $this->user->index();
+        return view('Dashboard.index')->with('post', $post)->with('user', $user);
     }
 
 }
