@@ -35,3 +35,8 @@ Route::post('/admin/update-post/{id}', [PostController::class, 'update'])->name(
 Route::post('/admin/delete-post/{id}', [PostController::class, 'delete'])->name('delete.post');
 Route::post('/admin/login', [LoginCotroller::class, 'handle'])->name('handle.login');
 Route::post('/admin/register', [RegisterCotroller::class, 'store'])->name('handle.register');
+//Tag
+Route::get('/admin/get-post', [TagController::class, 'getAllTag'])->name('getAllTag');
+Route::post('/admin/create-tag', [TagController::class, 'store'])->name('create_tag');
+Route::post('/admin/update-tag/{id}', [TagController::class, 'update'])->name('update.tag');
+Route::post('/admin/delete-tag/{id}', [TagController::class, 'delete'])->name('delete.tag');

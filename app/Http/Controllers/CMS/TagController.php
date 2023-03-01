@@ -14,15 +14,60 @@ class TagController extends Controller
         $this->tag = $tag;
     }
 
+    public function getAllTag()
+    {
+        $tag = $this->tag->index();
+        return response()->json([
+            'data' => $tag
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->all();
         $tag = $this->tag->store($data);
-        return redirect()->route('Dashboard');
+        if (empty($tag)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Thêm mới không thành công'
+            ]);
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Thêm mới thành công'
+        ]);
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
+        $tag = $this->tag->show($id);
+        if (empty($tag)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không tìm thấy'
+            ]);
+        }
+        $tag = $request->all();
+        $data = $this->tag->update($id, $tag);
+        return response()->json([
+            'status' => true,
+            'message' => 'Cập nhật thành công'
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $data = $this->tag->show($id);
+        if (empty($tag)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Thêm mới không thành công'
+            ]);
+        }
+        $data = $this->tag->delete($id);
+        return response()->json([
+            'status' => true,
+            'message' => 'Thêm mới thành công'
+        ]);
     }
 }

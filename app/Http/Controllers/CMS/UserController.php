@@ -125,16 +125,17 @@ class UserController extends Controller
 
     public function delete($id)
     {
-        $user = $this->user->delete($id);
+        $user = $this->user->show($id);
         if (empty($user)) {
             return response()->json([
-                'status' => true,
-                'message' => 'Đã xoá thành công'
+                'status' => false,
+                'message' => 'Xoá không thành công'
             ]);
         }
+        $user = $this->user->delete($id);
         return response()->json([
-            'status' => false,
-            'message' => 'Xoá không thành công'
+            'status' => true,
+            'message' => 'Đã xoá thành công',
         ]);
     }
 
