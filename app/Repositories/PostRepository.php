@@ -12,7 +12,7 @@ class PostRepository implements IPostRepository
 
     public function all()
     {
-        return $data = Post::all();
+        return $data = Post::orderBy('id','DESC')->paginate(10);
     }
 
     public function create(array $post)
