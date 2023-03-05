@@ -36,12 +36,14 @@ class PostController extends Controller
         $data['image'] = $this->uploadImage($request);
         $post = $this->postRepository->create($data);
         if (!empty($post)) {
+            Log::channel('customLog')->info('Success :',['data' => $post]);
             return response()->json([
                 'status' => true,
                 'data' => $post,
                 'message' => 'Tạo bài viết thành công'
             ]);
         }
+        Log::channel('customLog')->error('Fail :',['data' => $post]);
         return response()->json([
             'status' => false,
             'message' => 'Tạo bài viết không thành công'
