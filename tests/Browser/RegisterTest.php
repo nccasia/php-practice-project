@@ -13,6 +13,7 @@ class RegisterTest extends DuskTestCase
 
     public function test_user_register(): void
     {
+        
         $user = User::factory()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
