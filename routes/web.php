@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetController;
+use App\Http\Controllers\CMS\EmailController;
 use App\Http\Controllers\CMS\GoogleController;
 use App\Http\Controllers\CMS\HomeController;
 use App\Http\Controllers\CMS\SearchController;
+use App\Http\Controllers\ImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,3 +35,9 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 Route::get('admin/login-google/{provider}',[GoogleController::class,'redirect'])->name('LoginGoogle');
 Route::get('/callback/{provider}',[GoogleController::class,'callback'])->name('Callback');
+
+Route::get('/log',[HomeController::class,'log'])->name('log');
+
+Route::get('/email',[EmailController::class,'index'])->name('mail');
+Route::post('/sendmail',[EmailController::class,'sendmail'])->name('sendmail');
+Route::post('/upload-file-post',[ImportController::class,'uploadFilePost'])->name('upload');

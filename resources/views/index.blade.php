@@ -97,6 +97,33 @@
 
     </tbody>
 </table>
+{{--Mail--}}
+<h6 class="mb-4">Danh sách mail</h6>
+<table class="table table-hover" id="post">
+    <thead>
+    <tr>
+        <th scope="col">Người gửi</th>
+        <th scope="col">Nội dung</th>
+        <th scope="col">Mail</th>
+        <th scope="col">Chức năng</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach($mail as $listmail)
+        <tr>
+            {{--            @dd($listmail->getMailNameAttribute());--}}
+            <th>{{$listmail->getMailNameAttribute()}}</th>
+            <th>{{$listmail->content}}</th>
+            <th>{{$listmail->mail}}</th>
+            <th>
+                <button><a href="/admin/edit-post/{{ $listmail->id }}">Sửa</a></button>
+                <button><a href="{{ route('delete.post',['id' =>$listmail->id ]) }}">Xoá</a></button>
+            </th>
+        </tr>
+    @endforeach
+
+    </tbody>
+</table>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
