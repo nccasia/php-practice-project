@@ -11,28 +11,17 @@ class CRUDPostTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
-    public function test_create_post(): void
-    {
-        $post = Post::factory()->create();
+    protected $post;
 
-        $this->browse(function (Browser $browser) use ($post) {
-            $browser->visit('/admin/login')
-                ->assertSee('Sign In')
-                ->type('username', 'lisieubquay1238')
-                ->type('password', '12345678')
-                ->press('Login')
-                ->assertRouteIs('index')
-                ->assertSee('Create post')
-                ->type('title', $post->title)
-                ->type('content', $post->content)
-                ->attach('image', public_path('\anh\KM4FhE.jpg'))
-                ->press('Thêm bài viết')
-                ->assertPathIs('/api/admin/create-post');
-        });
+    public function setUp(): void
+    {
+        parent::setUp();
+        $newPost = Post::factory()->create();
+
+        $this->post = $newPost;
     }
 
-//
-    public function test_delete_post(): void
+    public function test_create_post(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
@@ -41,9 +30,12 @@ class CRUDPostTest extends DuskTestCase
                 ->type('password', '12345678')
                 ->press('Login')
                 ->assertRouteIs('index')
-                ->assertSee('Bài đăng')
-                ->click('@delete-post(9)')
-                ->assertPathIs('/api/admin/delete-post/9');
+                ->assertSee('Create post')
+                ->type('title', $this->post->title)
+                ->type('content', $this->post->content)
+                ->attach('image', public_path('\anh\KM4FhE.jpg'))
+                ->press('Thêm bài viết')
+                ->assertPathIs('/api/admin/create-post');
         });
     }
 
@@ -58,8 +50,40 @@ class CRUDPostTest extends DuskTestCase
                 ->assertRouteIs('index')
                 ->visit('/')
                 ->assertSee('Home')
-                ->click('@detail-post(10)')
-                ->assertPathIs('/detail-post/10');
+                ->click('@detail-post-' . $this->post->id)
+                ->assertPathIs('/detail-post/' . $this->post->id);
+        });
+    }
+
+    public function test_delete_post(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/admin/login')
+                ->assertSee('Sign In')
+                ->type('username', 'lisieubquay1238')
+                ->type('password', '12345678')
+                ->press('Login')
+                ->assertRouteIs('index')
+                ->assertSee('Bài đăng')
+                ->press('@delete-post-' . $this->post->id)
+                ->assertPathIs('/api/admin/delete-post/' . $this->post->id);
+        });
+    }
+
+    public function test_restore_post(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/admin/login')
+                ->assertSee('Sign In')
+                ->type('username', 'lisieubquay1238')
+                ->type('password', '12345678')
+                ->press('Login')
+                ->assertRouteIs('index')
+                ->assertSee('Bài đăng')
+                ->clickLink('Lịch sử')
+                ->assertSee('Bài đăng')
+                ->press('@restore-post-'.$this->post->id)
+                ->assertPathIs('/dashboard');
         });
     }
 }
